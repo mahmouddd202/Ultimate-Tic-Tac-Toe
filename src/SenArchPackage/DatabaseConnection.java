@@ -9,7 +9,7 @@ import java.util.Properties;
 public class DatabaseConnection {
     public static Connection getConnection() throws SQLException {
         try (InputStream input = DatabaseConnection.class.getClassLoader()
-                .getResourceAsStream("config.properties")) {
+                .getResourceAsStream("resources/config.properties")) {
             
             if (input == null) {
                 throw new SQLException("Unable to find config.properties");
