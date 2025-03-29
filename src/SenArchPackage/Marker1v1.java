@@ -3,6 +3,8 @@ import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -23,24 +25,30 @@ public class Marker1v1 implements IGameObject1v1 {
 	private float fadeSpeed = 0.05f;
 	
 	public Marker1v1(int x, int y, int startX, int startY, int size, int type) {
-		
+
 		this.x = x;
 		this.y = y;
 		this.startX = startX;
 		this.startY = startY;
 		this.size = size;
-		
+
 		this.type = type % 2;
 		String markerType = this.type == 0 ? "x" : "o";
-		
+
 		try {
-			
-			marker = ImageIO.read(new File("assets/" + markerType + ".png"));
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+			// Load from resources using classloader
+			InputStream imgStream = getClass().getResourceAsStream("/resources/assets/" + markerType + ".png");
+			if (imgStream != null) {
+				marker = ImageIO.read(imgStream);
+			} else {
+				throw new IOException("Image resource not found: assets/" + markerType + ".png");
+			}
+		} catch (IOException e) {
+			System.err.println("Failed to load marker image: " + e.getMessage());
+			// Create blank image as fallback
+			marker = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 		}
-		
+
 	}
 
 	public Marker1v1(int type) {
