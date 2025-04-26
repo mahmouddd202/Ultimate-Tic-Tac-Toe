@@ -29,13 +29,13 @@ public class PlayerAndScoreGUI extends JFrame {
 
     public PlayerAndScoreGUI() {
         try {
-            // Get connection from the DatabaseConnection class
-            con = DatabaseConnection.getConnection();
+            // Get connection from the DatabaseConnection singleton
+            con = DatabaseConnection.getInstance().getConnection();
             System.out.println("Connection created");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage());
             e.printStackTrace();
-            System.exit(1); // Exit if we can't connect to database
+            System.exit(1);
         }
 
         retrieveFromMySQL();
@@ -232,7 +232,7 @@ public class PlayerAndScoreGUI extends JFrame {
    
    private void exitApplication ()
    {
-	  closeConnection();
+	 // closeConnection();
       Welcome w = new Welcome();
       this.dispose();
    }
@@ -288,14 +288,14 @@ public class PlayerAndScoreGUI extends JFrame {
        }
    }
    
-   private void closeConnection() {
-       if (con != null) {
-           try {
-               con.close();
-               System.out.println("Connection closed");
-           } catch (SQLException e) {
-        	   e.printStackTrace(); // Handle SQL exception
-           }
-       }
-   }   
+//   private void closeConnection() {
+//       if (con != null) {
+//           try {
+//               con.close();
+//               System.out.println("Connection closed");
+//           } catch (SQLException e) {
+//        	   e.printStackTrace(); // Handle SQL exception
+//           }
+//       }
+//   }
 } 

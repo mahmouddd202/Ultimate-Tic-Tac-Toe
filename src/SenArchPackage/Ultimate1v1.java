@@ -47,16 +47,18 @@ public class Ultimate1v1 implements IGameObject1v1, MouseListener{
 		}
 		
 		mainGrid = new UltimateGrid1v1(0, 0, Main1v1.WIDTH, false, false);
-		
-		 try {
-	            // Get connection from the DatabaseConnection class
-	            con = DatabaseConnection.getConnection();
-	            System.out.println("Connection created");
-	        } catch (SQLException e) {
-	            JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage());
-	            e.printStackTrace();
-	            System.exit(1); // Exit if we can't connect to database
-	        }
+
+		try {
+			// Get connection from the DatabaseConnection singleton
+			con = DatabaseConnection.getInstance().getConnection();
+			System.out.println("Connection created");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage());
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+
 		
 		
 	}
