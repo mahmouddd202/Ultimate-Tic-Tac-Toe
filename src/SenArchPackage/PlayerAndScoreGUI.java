@@ -39,7 +39,7 @@ public class PlayerAndScoreGUI extends JFrame {
         }
 
         retrieveFromMySQL();
-        // Rest of your GUI initialization remains the same
+
         JPanel flow1Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel flow2Panel = new JPanel(new GridLayout(1, 2));
         JPanel gridPanel = new JPanel(new GridLayout(2, 1));
