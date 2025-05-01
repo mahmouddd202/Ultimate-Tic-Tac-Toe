@@ -9,14 +9,16 @@ public class GamePanel1v1 extends Panel1v1 implements MouseMotionListener, Mouse
 
 private Ultimate1v1 ultimate1v1;
 
-	
-	public GamePanel1v1(Color color) {
-		super(color);
-		
-		ultimate1v1 = new Ultimate1v1();
-		
-	}   
-	
+public GamePanel1v1(Color color, String playerX, String playerO) {
+    super(color);
+
+    ultimate1v1 = new Ultimate1v1(playerX, playerO);
+
+    // Register a popup observer
+    ultimate1v1.addObserver(new GameEndPopup());
+}
+
+
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);

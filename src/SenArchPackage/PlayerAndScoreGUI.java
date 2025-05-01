@@ -1,6 +1,6 @@
 package SenArchPackage;
 
-import javax.swing.*;   
+import javax.swing.*;    
 
 
 import java.awt.*;
@@ -68,7 +68,9 @@ public class PlayerAndScoreGUI extends JFrame {
         gridPanel.add(flow1Panel);
         gridPanel.add(flow2Panel);
 
-        add(playerTextArea, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(playerTextArea);
+        add(scrollPane, BorderLayout.CENTER);
+
         add(gridPanel, BorderLayout.SOUTH);
 
         addButton.addActionListener(event -> addPlayer());
@@ -210,66 +212,62 @@ public class PlayerAndScoreGUI extends JFrame {
 	}
    
    private void exportToMySQL(String name, int score) {
-       try {
-           // Prepare the SQL INSERT statement
-    	   String sql = "INSERT INTO name_score (name, score) VALUES (?, ?)";
-    	   PreparedStatement preparedStatement = con.prepareStatement(sql);
-   
-    	   // Set the values for the prepared statement parameters
-    	   preparedStatement.setString(1, name);
-    	   preparedStatement.setInt(2, score);
-   
-    	   // Execute the INSERT statement
-    	   int rowsInserted = preparedStatement.executeUpdate();
-   
-    	   if (rowsInserted > 0) {
-    		   System.out.println("A new record was inserted successfully.");
-           }
-       } catch (SQLException e) {
-           e.printStackTrace();
-       }
-   }
+	    try {
+	        String sql = "INSERT INTO name_score (name, score, user_id) VALUES (?, ?, ?)";
+	        PreparedStatement preparedStatement = con.prepareStatement(sql);
+
+	        preparedStatement.setString(1, name);
+	        preparedStatement.setInt(2, score);
+	        preparedStatement.setInt(3, Session.userId);  // 💥 Connect player to current user
+
+	        int rowsInserted = preparedStatement.executeUpdate();
+
+	        if (rowsInserted > 0) {
+	            System.out.println("A new record was inserted successfully for user: " + Session.username);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
    
    private void exitApplication ()
    {
-	 // closeConnection();
-      Welcome w = new Welcome();
+	
+	   Choose c = new Choose();
       this.dispose();
    }
    
    private void retrieveFromMySQL() {
-       try {
-           // Prepare the SQL SELECT statement
-    	   String sql = "SELECT name, score FROM name_score";
-    	   PreparedStatement preparedStatement = con.prepareStatement(sql);
-   
-    	   // Execute the SELECT statement
-    	   ResultSet resultSet = preparedStatement.executeQuery();
-   
-    	   // Clear existing data
-    	   PlayerAndScores.clear();
-   
-    	   // Iterate through the result set and populate the LinkedList
-    	   while (resultSet.next()) {
-    		   String name = resultSet.getString("name");
-    		   int score = resultSet.getInt("score");
-   
-    		   PlayerAndScore player = null;
-    		   try {
-    			   player = new PlayerAndScore(name, score);
-    			   PlayerAndScores.add(player);
+	    try {
+	        String sql = "SELECT name, score FROM name_score WHERE user_id = ?";
+	        PreparedStatement preparedStatement = con.prepareStatement(sql);
 
-    		   } catch (PlayerAndScoreException e) {
-    			   e.printStackTrace();
-    		   }
-    	   }
-    	   
-    	   // Display the retrieved data in the JTextArea
-           displayAll();
-       	} catch (SQLException e) {
-           e.printStackTrace();
-       }
-   }
+	        preparedStatement.setInt(1, Session.userId);  // 💥 Select only the current user's players
+
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        
+	        PlayerAndScores.clear(); // Clear the old list before loading new data
+
+	        while (resultSet.next()) {
+	            String name = resultSet.getString("name");
+	            int score = resultSet.getInt("score");
+
+	            try {
+	                PlayerAndScore player = new PlayerAndScore(name, score);
+	                PlayerAndScores.add(player);
+	            } catch (PlayerAndScoreException e) {
+	                e.printStackTrace();
+	            }
+	        }
+
+	        displayAll(); // Update the GUI
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
    
    private void deleteAllFromMySQL() {
        try {

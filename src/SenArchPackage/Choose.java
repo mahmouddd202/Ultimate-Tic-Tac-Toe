@@ -10,16 +10,17 @@ import java.awt.event.ActionListener;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 
 public class Choose implements ActionListener {
 	
 	JFrame f = new JFrame("UTIMATE TIC-TAC-TOE")  ;
-	
-		JButton _3x3 = new JButton("play vs AI");
+		
+		JButton LeaderBoard = new JButton("Leader Board");
 		JButton _4x4 = new JButton("4x4");
 		JButton _3v3_1v1 = new JButton("3x3");
-		JButton back = new JButton("Back");
+		JButton profileButton = new JButton("profile");
 	
 	public Choose() {
 		f.setSize(500,200);
@@ -28,11 +29,11 @@ public class Choose implements ActionListener {
 		f.setResizable(false);
 				
 		
-		_3x3.setFocusable(false);
-		_3x3.addActionListener(this);
-		_3x3.setBackground(new Color(0x804314));
-		_3x3.setForeground(Color.white);
-		_3x3.setFont(new Font("serif", Font.BOLD,20));
+		LeaderBoard.setFocusable(false);
+		LeaderBoard.addActionListener(this);
+		LeaderBoard.setBackground(new Color(0x804314));
+		LeaderBoard.setForeground(Color.white);
+		LeaderBoard.setFont(new Font("serif", Font.BOLD,20));
 				
 		
 		_4x4.setFocusable(false);
@@ -47,53 +48,51 @@ public class Choose implements ActionListener {
 		_3v3_1v1.setForeground(Color.white);
 		_3v3_1v1.setFont(new Font("serif", Font.BOLD,20));
 		
-		back.setFocusable(false);
-		back.addActionListener(this);
-		back.setBackground((new Color(0x006666)));
-		back.setForeground(Color.white);
-		back.setFont(new Font("serif", Font.BOLD,20));
+		profileButton.setFocusable(false);
+		profileButton.addActionListener(this);
+		profileButton.setBackground(new Color(0x006666));
+		profileButton.setForeground(Color.WHITE);
+		profileButton.setFont(new Font("Serif", Font.BOLD, 20));
+		profileButton.setPreferredSize(new Dimension(100, 100));
+
 		
 		
 		_3v3_1v1.setPreferredSize(new Dimension(100, 100));
 		_4x4.setPreferredSize(new Dimension(100, 100));
-		_3x3.setPreferredSize(new Dimension(100, 100));
-		back.setPreferredSize(new Dimension(100, 100));
+		LeaderBoard.setPreferredSize(new Dimension(100, 100));
 		
 		f.setLayout(new GridLayout(2,2));
 		
 		f.add(_3v3_1v1);
 		f.add(_4x4);
-		f.add(_3x3);
-		f.add(back);
+		f.add(LeaderBoard);
+		f.add(profileButton);
 		
 		f.setVisible(true);
 
 		}
 	
 
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == back) {
-			Welcome w = new Welcome();
-			f.dispose();
-		}
-//		else if (e.getSource() == _3x3) {
-//			Main m = new Main();
-//			f.dispose();
-//			
-//		}
-		else if (e.getSource() == _4x4) {
-			Main1v1 m1 = new Main1v1(4,4,16);
-			f.dispose();
-			
-		}
-		else if (e.getSource() == _3v3_1v1) {
-			Main1v1 m2 = new Main1v1(3,3,9);
-			f.dispose();
-			
-		}
+		if (e.getSource() == profileButton) {
+			    new ProfileForm();
+			    f.dispose();
+		
+		    }
+		
 
+	    else if (e.getSource() == _4x4) {
+	        PlayerChooser chooser = new PlayerChooser(4, 4, 16);
+	        f.dispose();
+	    }
+	    else if (e.getSource() == _3v3_1v1) {
+	        PlayerChooser chooser = new PlayerChooser(3, 3, 9);
+	        f.dispose();
+	    }
+	     else if (e.getSource()== LeaderBoard) {
+	    	 MainForLeaderboard mn = new MainForLeaderboard();
+	    	 f.dispose();
+	     }
 	}
-
 }
